@@ -19,145 +19,69 @@ namespace UniversitySystemWeb.Controllers
         }
 
         // GET: Professors
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string username)
         {
-            var graderDBContext = _context.Professors.Include(p => p.UsersUsernameNavigation);
-            return View(await graderDBContext.ToListAsync());
-        }
-
-        // GET: Professors/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null || _context.Professors == null)
-            {
-                return NotFound();
-            }
-
             var professor = await _context.Professors
-                .Include(p => p.UsersUsernameNavigation)
-                .FirstOrDefaultAsync(m => m.Afm == id);
-            if (professor == null)
+                .Include(s => s.UsersUsernameNavigation)
+                .FirstOrDefaultAsync();
+            ViewBag.id = professor.Afm;
+            if (professor != null)
             {
-                return NotFound();
+                return View(professor);
             }
-
-            return View(professor);
+            return NotFound();
         }
 
-        // GET: Professors/Create
-        public IActionResult Create()
+        public async Task<IActionResult> InsertGrade(int? id) 
         {
-            ViewData["UsersUsername"] = new SelectList(_context.Users, "Username", "Username");
+            var professor = await _context.Professors
+                .Include(s => s.UsersUsernameNavigation)
+                .FirstOrDefaultAsync(m => m.Afm == id);
+            ViewBag.id = professor.Afm;
+            
             return View();
         }
 
-        // POST: Professors/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Afm,Name,Surname,Department,UsersUsername")] Professor professor)
+        public async Task<IActionResult> ViewGrade(int? id,string cTitle = "") 
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(professor);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["UsersUsername"] = new SelectList(_context.Users, "Username", "Username", professor.UsersUsername);
-            return View(professor);
-        }
-
-        // GET: Professors/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null || _context.Professors == null)
-            {
-                return NotFound();
-            }
-
-            var professor = await _context.Professors.FindAsync(id);
-            if (professor == null)
-            {
-                return NotFound();
-            }
-            ViewData["UsersUsername"] = new SelectList(_context.Users, "Username", "Username", professor.UsersUsername);
-            return View(professor);
-        }
-
-        // POST: Professors/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Afm,Name,Surname,Department,UsersUsername")] Professor professor)
-        {
-            if (id != professor.Afm)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(professor);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ProfessorExists(professor.Afm))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["UsersUsername"] = new SelectList(_context.Users, "Username", "Username", professor.UsersUsername);
-            return View(professor);
-        }
-
-        // GET: Professors/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null || _context.Professors == null)
-            {
-                return NotFound();
-            }
-
             var professor = await _context.Professors
-                .Include(p => p.UsersUsernameNavigation)
+                .Include(s => s.UsersUsernameNavigation)
                 .FirstOrDefaultAsync(m => m.Afm == id);
-            if (professor == null)
-            {
-                return NotFound();
-            }
+            ViewBag.id = professor.Afm;
+            var courses = from course in _context.Courses
+                          join courseGrades in _context.CourseHasStudents on course.IdCourse equals courseGrades.CourseIdCourse
+                          into result
+                          from item in result
+                          join prof in _context.Professors on course.ProfessorsAfm equals prof.Afm
+                          where item.GradeCourseStudent != null 
+                          select new ViewModel
+                          { grade = (int)item.GradeCourseStudent, title = course.CourseTitle, semester = course.CourseSemester, registrationNumber = (int)item.StudentsRegistrationNumber };
 
-            return View(professor);
-        }
-
-        // POST: Professors/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            if (_context.Professors == null)
+            var titles = new List<string>(courses.Select(x => x.title).Distinct());
+            List<SelectListItem> courseTitles  = titles.ConvertAll(a =>
             {
-                return Problem("Entity set 'GraderDBContext.Professors'  is null.");
-            }
-            var professor = await _context.Professors.FindAsync(id);
-            if (professor != null)
-            {
-                _context.Professors.Remove(professor);
-            }
+                return new SelectListItem()
+                {
+                    Text = a.ToString(),
+                    Value = a.ToString(),
+                    Selected = false
+                };
+            });
             
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            ViewBag.cTitle = cTitle;
+
+            ViewBag.courseTitles = courseTitles;
+            if (courses != null) 
+            {
+                return View(courses);
+            }             
+            return View();
         }
+
+        
+
+        
+        
 
         private bool ProfessorExists(int id)
         {

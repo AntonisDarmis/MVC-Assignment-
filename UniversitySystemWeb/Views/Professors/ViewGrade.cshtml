@@ -1,26 +1,26 @@
 ﻿@model IEnumerable<ViewModel>
 
+
 @{
-    ViewData["Title"] = "GradePerSemester";
+    ViewData["Title"] = "ViewGrade";
+    var filteredModels = Model.Select(s=>s.title == ViewBag.title);
 }
 
 <h2>View courses per semester</h2>
 <div>
-    @using (Html.BeginForm("GradePerSemester","Students"))
+    @using (Html.BeginForm("ViewGrade", "Professors"))
     {
         @Html.AntiForgeryToken()
         <div class=" form-group">
-            <label for="semester">Choose a semester:</label>
-            <select name="semester" id="semester">
-                <option selected="selected" value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-                <option value="8">8</option>
-            </select>
+            <fieldset>
+
+            Course Title
+
+                @Html.DropDownList("cTitle", (IEnumerable
+            <SelectListItem>)ViewBag.courseTitles)
+
+    </fieldset>
+
             <div class="form-group">
                 <input type="submit" name="submit" class="btn btn-primary" />
             </div>
@@ -42,11 +42,14 @@
         </tr>
     </thead>
     <tbody>
+
         @foreach (var item in Model)
         {
-            <tr>
+            if (item.title == @ViewBag.cTitle)
+            {
+                 <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.title)
+                    @Html.DisplayFor(modelItem => item.title )
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.semester)
@@ -55,7 +58,8 @@
                     @Html.DisplayFor(modelItem => item.grade)
                 </td>
             </tr>
-        }
+            }
+         }
+           
     </tbody>
 </table>
-

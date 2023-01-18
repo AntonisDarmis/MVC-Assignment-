@@ -24,6 +24,7 @@ namespace UniversitySystemWeb.Controllers
             var student = await _context.Students
                 .Include(s => s.UsersUsernameNavigation)
                 .FirstOrDefaultAsync();
+            ViewBag.id = student.RegistrationNumber;
             if (student!=null) 
             {
                 return View(student);
@@ -31,80 +32,93 @@ namespace UniversitySystemWeb.Controllers
             return NotFound(); 
         }
 
-        // GET: Students/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null || _context.Students == null)
-            {
-                return NotFound();
-            }
-
-            var student = await _context.Students
-                .Include(s => s.UsersUsernameNavigation)
-                .FirstOrDefaultAsync(m => m.RegistrationNumber == id);
-            if (student == null)
-            {
-                return NotFound();
-            }
-
-            return View(student);
-        }
-
+       
 
 
         public async Task<IActionResult> GradePerCourse(int? id)
         {
             var student = await _context.Students
-                .Include(s => s.UsersUsernameNavigation)
-                .FirstOrDefaultAsync(m => m.RegistrationNumber == id);
-            if (student == null)
+               .Include(s => s.UsersUsernameNavigation)
+               .FirstOrDefaultAsync(m => m.RegistrationNumber == id);
+            var grade = from stud in _context.Students
+                         join courseGrades in _context.CourseHasStudents on stud.RegistrationNumber equals courseGrades.StudentsRegistrationNumber
+                         into res1
+                         from item in res1
+                         join course in _context.Courses on item.CourseIdCourse equals course.IdCourse
+                         where stud.RegistrationNumber == id
+                         select new ViewModel
+                         {grade = (int)item.GradeCourseStudent, title = course.CourseTitle, semester = course.CourseSemester };
+            ViewBag.id = student.RegistrationNumber;
+            if (grade != null)
             {
-                return NotFound();
+                return View(grade);
             }
-            return View(student);
+            return View();
         }
 
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> GradePerCourse(int? id,string courseName)
+        
+        public async Task<IActionResult> GradePerSemester(int? id,string semester="1")
         {
-            var student = await _context.Students
-                .Include(s => s.UsersUsernameNavigation)
-                .FirstOrDefaultAsync(m => m.RegistrationNumber == id);
-            if (student == null)
-            {
-                return NotFound();
-            }
-            return View(student);
-        }
 
-
-
-
-        public async Task<IActionResult> GradePerSemester(int? id)
-        {
             var student = await _context.Students
                  .Include(s => s.UsersUsernameNavigation)
                  .FirstOrDefaultAsync(m => m.RegistrationNumber == id);
+            ViewBag.id = student.RegistrationNumber;
             if (student == null)
             {
                 return NotFound();
             }
-            return View(student);
+            var courses = from stud in _context.Students
+                          join courseGrades in _context.CourseHasStudents on stud.RegistrationNumber equals courseGrades.StudentsRegistrationNumber
+                          into res1
+                          from item in res1
+                          join course in _context.Courses on item.CourseIdCourse equals course.IdCourse
+                          where stud.RegistrationNumber == id && course.CourseSemester == semester
+                          select new ViewModel
+                          { grade = (int)item.GradeCourseStudent, title = course.CourseTitle, semester = course.CourseSemester, registrationNumber = (int)item.StudentsRegistrationNumber };
+            ViewBag.id = student.RegistrationNumber;
+
+            if (courses != null) 
+            {
+                return View(courses);
+            }
+            return View();
         }
+
+
+
+
+
+
+    
 
        
         public async Task<IActionResult> TotalGrade(int? id)
         {
+            
             var student = await _context.Students
                  .Include(s => s.UsersUsernameNavigation)
                  .FirstOrDefaultAsync(m => m.RegistrationNumber == id);
+            ViewBag.id = student.RegistrationNumber;
+            var courses = from stud in _context.Students
+                          join courseGrades in _context.CourseHasStudents on stud.RegistrationNumber equals courseGrades.StudentsRegistrationNumber
+                          into res1
+                          from item in res1
+                          join course in _context.Courses on item.CourseIdCourse equals course.IdCourse
+                          where stud.RegistrationNumber == id 
+                          select new ViewModel
+                          { grade = (int)item.GradeCourseStudent, title = course.CourseTitle, semester = course.CourseSemester };
             if (student == null)
             {
                 return NotFound();
             }
-            return View(student);
+            int totalGrade = 0;
+            foreach (var item in courses) 
+            {
+                totalGrade += item.grade;
+            }
+            totalGrade = totalGrade / courses.Count();
+            return View(ViewBag.Total = totalGrade);
         }
 
         

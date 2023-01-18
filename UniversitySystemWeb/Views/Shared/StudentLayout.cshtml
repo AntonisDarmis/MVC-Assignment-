@@ -1,7 +1,8 @@
 ﻿@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
-@model UniversitySystemWeb.Models.Student
+
+
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -23,13 +24,13 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-route-id="@Model?.RegistrationNumber" asp-controller="Students" asp-action="GradePerCourse">Grade per course</a>
+                            <a class="nav-link text-dark" asp-area="" asp-route-id="@ViewBag.id" asp-controller="Students" asp-action="GradePerCourse">Grade per course</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-route-id="@Model?.RegistrationNumber" asp-controller="Students" asp-action="GradePerSemester">Grade per semester</a>
+                            <a class="nav-link text-dark" asp-area="" asp-route-id="@ViewBag.id" asp-controller="Students" asp-action="GradePerSemester">Grade per semester</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-route-id="@Model?.RegistrationNumber" asp-controller="Students" asp-action="TotalGrade">Total grade</a>
+                            <a class="nav-link text-dark" asp-area="" asp-route-id="@ViewBag.id" asp-controller="Students" asp-action="TotalGrade">Total grade</a>
                         </li>
                     </ul>
                 </div>

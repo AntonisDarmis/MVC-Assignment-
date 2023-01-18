@@ -1,17 +1,42 @@
-﻿@model UniversitySystemWeb.Models.Student
+﻿@model IEnumerable<ViewModel>
 
 @{
     ViewData["Title"] = "GradePerCourse";
 }
 
-<h1>Enter the subject's name:</h1>
-<div>
-    @using (Html.BeginForm()
-    {
-       
-    }
-</div>
+<h2>View Grades for all subjects </h2>
 
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Course Title
+            </th>
+            <th>
+               Course Semester
+            </th>
+            <th>
+                Course Grade
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model )
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.semester)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.grade)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
               
 
 @section Scripts {

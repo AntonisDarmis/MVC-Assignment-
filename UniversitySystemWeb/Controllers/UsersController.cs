@@ -69,7 +69,7 @@ namespace UniversitySystemWeb.Controllers
                     }
                     else 
                     {
-                        return RedirectToAction("Index", "Professors",username);
+                        return RedirectToAction("Index", "Professors", new { username = username });
                     }
                 }
                 else
