@@ -10,17 +10,18 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit">
+        <form asp-action="InsertGrade" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="CourseIdCourse" />
+
             <div class="form-group">
                 <label asp-for="StudentsRegistrationNumber" class="control-label"></label>
-                <select asp-for="StudentsRegistrationNumber" class="form-control" asp-items="ViewBag.StudentsRegistrationNumber"></select>
+                <input type="text" asp-for="StudentsRegistrationNumber" class="form-control" asp-items="ViewBag.StudentsRegistrationNumber" disabled/>
                 <span asp-validation-for="StudentsRegistrationNumber" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="GradeCourseStudent" class="control-label"></label>
-                <input asp-for="GradeCourseStudent" class="form-control" />
+                <input type ="number" min ="0" max="10" asp-for="GradeCourseStudent" class="form-control"  />
                 <span asp-validation-for="GradeCourseStudent" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -30,9 +31,8 @@
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+
+
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

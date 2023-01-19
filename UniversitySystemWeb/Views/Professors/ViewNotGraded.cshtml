@@ -1,0 +1,46 @@
+﻿@model IEnumerable<ViewModel>
+@{
+    ViewData["Title"] = "ViewNotGraded";
+   
+}
+
+<h2>View courses per semester</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Course Title
+            </th>
+            <th>
+                Course Semester
+            </th>
+            <th>
+                Course Grade
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var item in Model)
+        {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.title )
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.semester)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.registrationNumber)
+                    </td>
+                <td>
+                    @Html.ActionLink("Insert Grade", "InsertGrade","CourseHasStudents", 
+                    new { courseId = item.courseId,professorId = item.professorId, courseName = item.title})
+                    
+                </td>
+                </tr>
+        }
+
+    </tbody>
+</table>

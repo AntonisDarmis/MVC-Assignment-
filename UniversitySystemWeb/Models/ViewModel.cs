@@ -8,5 +8,8 @@
         public string semester { get; set; }
         
         public int registrationNumber { get; set; }
+
+        public int courseId { get; set; }
+        public int professorId { get; set; }
     }
 }

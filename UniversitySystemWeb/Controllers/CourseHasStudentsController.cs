@@ -21,65 +21,25 @@ namespace UniversitySystemWeb.Controllers
         // GET: CourseHasStudents
         public async Task<IActionResult> Index()
         {
-            var graderDBContext = _context.CourseHasStudents.Include(c => c.CourseIdCourseNavigation).Include(c => c.StudentsRegistrationNumberNavigation);
-            return View(await graderDBContext.ToListAsync());
-        }
-
-        // GET: CourseHasStudents/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null || _context.CourseHasStudents == null)
-            {
-                return NotFound();
-            }
-
-            var courseHasStudent = await _context.CourseHasStudents
-                .Include(c => c.CourseIdCourseNavigation)
-                .Include(c => c.StudentsRegistrationNumberNavigation)
-                .FirstOrDefaultAsync(m => m.CourseIdCourse == id);
-            if (courseHasStudent == null)
-            {
-                return NotFound();
-            }
-
-            return View(courseHasStudent);
-        }
-
-        // GET: CourseHasStudents/Create
-        public IActionResult Create()
-        {
-            ViewData["CourseIdCourse"] = new SelectList(_context.Courses, "IdCourse", "IdCourse");
-            ViewData["StudentsRegistrationNumber"] = new SelectList(_context.Students, "RegistrationNumber", "RegistrationNumber");
+       
             return View();
         }
 
-        // POST: CourseHasStudents/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CourseIdCourse,StudentsRegistrationNumber,GradeCourseStudent")] CourseHasStudent courseHasStudent)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(courseHasStudent);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["CourseIdCourse"] = new SelectList(_context.Courses, "IdCourse", "IdCourse", courseHasStudent.CourseIdCourse);
-            ViewData["StudentsRegistrationNumber"] = new SelectList(_context.Students, "RegistrationNumber", "RegistrationNumber", courseHasStudent.StudentsRegistrationNumber);
-            return View(courseHasStudent);
-        }
+        
+
+       
+
 
         // GET: CourseHasStudents/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> InsertGrade(int courseId,int professorId,string courseName)
         {
-            if (id == null || _context.CourseHasStudents == null)
+            ViewBag.name = courseName;
+            if (courseId == null || _context.CourseHasStudents == null)
             {
                 return NotFound();
             }
 
-            var courseHasStudent = await _context.CourseHasStudents.FindAsync(id);
+            var courseHasStudent = await _context.CourseHasStudents.FindAsync(courseId);
             if (courseHasStudent == null)
             {
                 return NotFound();
@@ -88,19 +48,26 @@ namespace UniversitySystemWeb.Controllers
             ViewData["StudentsRegistrationNumber"] = new SelectList(_context.Students, "RegistrationNumber", "RegistrationNumber", courseHasStudent.StudentsRegistrationNumber);
             return View(courseHasStudent);
         }
+
+
+
+
 
         // POST: CourseHasStudents/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CourseIdCourse,StudentsRegistrationNumber,GradeCourseStudent")] CourseHasStudent courseHasStudent)
+        public async Task<IActionResult> InsertGrade(int courseId,int professorId,[Bind("CourseIdCourse,StudentsRegistrationNumber,GradeCourseStudent")] CourseHasStudent courseHasStudent)
         {
-            if (id != courseHasStudent.CourseIdCourse)
+            if (courseHasStudent.CourseIdCourse==0)
             {
                 return NotFound();
             }
-
+            var errors = ModelState
+            .Where(x => x.Value.Errors.Count > 0)
+            .Select(x => new { x.Key, x.Value.Errors })
+            .ToArray();
             if (ModelState.IsValid)
             {
                 try
@@ -123,28 +90,10 @@ namespace UniversitySystemWeb.Controllers
             }
             ViewData["CourseIdCourse"] = new SelectList(_context.Courses, "IdCourse", "IdCourse", courseHasStudent.CourseIdCourse);
             ViewData["StudentsRegistrationNumber"] = new SelectList(_context.Students, "RegistrationNumber", "RegistrationNumber", courseHasStudent.StudentsRegistrationNumber);
-            return View(courseHasStudent);
+            return RedirectToAction("Index", "Professor", professorId);
         }
 
-        // GET: CourseHasStudents/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null || _context.CourseHasStudents == null)
-            {
-                return NotFound();
-            }
-
-            var courseHasStudent = await _context.CourseHasStudents
-                .Include(c => c.CourseIdCourseNavigation)
-                .Include(c => c.StudentsRegistrationNumberNavigation)
-                .FirstOrDefaultAsync(m => m.CourseIdCourse == id);
-            if (courseHasStudent == null)
-            {
-                return NotFound();
-            }
-
-            return View(courseHasStudent);
-        }
+       
 
         // POST: CourseHasStudents/Delete/5
         [HttpPost, ActionName("Delete")]

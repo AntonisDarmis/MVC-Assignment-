@@ -32,15 +32,11 @@ namespace UniversitySystemWeb.Controllers
             return NotFound();
         }
 
-        public async Task<IActionResult> InsertGrade(int? id) 
-        {
-            var professor = await _context.Professors
-                .Include(s => s.UsersUsernameNavigation)
-                .FirstOrDefaultAsync(m => m.Afm == id);
-            ViewBag.id = professor.Afm;
-            
-            return View();
-        }
+        
+
+
+
+    
 
         public async Task<IActionResult> ViewGrade(int? id,string cTitle = "") 
         {
@@ -78,14 +74,40 @@ namespace UniversitySystemWeb.Controllers
             return View();
         }
 
-        
+        public async Task<IActionResult> ViewNotGraded(int? id)
+        {
+            var professor = await _context.Professors
+                .Include(s => s.UsersUsernameNavigation)
+                .FirstOrDefaultAsync(m => m.Afm == id);
+            ViewBag.id = professor.Afm;
+            var courses = from course in _context.Courses
+                          join courseGrades in _context.CourseHasStudents on course.IdCourse equals courseGrades.CourseIdCourse
+                          into result
+                          from item in result
+                          join prof in _context.Professors on course.ProfessorsAfm equals prof.Afm
+                          where item.GradeCourseStudent == null
+                          select new ViewModel
+                          { title = course.CourseTitle, semester = course.CourseSemester, registrationNumber = (int)item.StudentsRegistrationNumber,professorId = professor.Afm, courseId=item.CourseIdCourse };
+            
+            if (courses != null)
+            {
+                return View(courses);
+            }
+            return View();
+        }
 
         
-        
+
+
+
 
         private bool ProfessorExists(int id)
         {
           return _context.Professors.Any(e => e.Afm == id);
+        }
+        private bool CourseHasStudentExists(int id)
+        {
+            return _context.CourseHasStudents.Any(e => e.CourseIdCourse == id);
         }
     }
 }
