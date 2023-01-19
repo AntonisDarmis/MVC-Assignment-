@@ -31,23 +31,23 @@ namespace UniversitySystemWeb.Controllers
 
 
         // GET: CourseHasStudents/Edit/5
-        public async Task<IActionResult> InsertGrade(int courseId,int professorId,string courseName)
+        public async Task<IActionResult> InsertGrade(int courseId,int professorId,int registrationNumber,string courseName)
         {
             ViewBag.courseId = courseId;
             ViewBag.professorId = professorId;
+            ViewBag.regNumber = registrationNumber;
             ViewBag.name = courseName;
             if (courseId == null || _context.CourseHasStudents == null)
             {
                 return NotFound();
             }
 
-            var courseHasStudent = await _context.CourseHasStudents.FindAsync(courseId);
+            var courseHasStudent = await _context.CourseHasStudents.FindAsync(courseId,registrationNumber);
             if (courseHasStudent == null)
             {
                 return NotFound();
             }
-            ViewData["CourseIdCourse"] = new SelectList(_context.Courses, "IdCourse", "IdCourse", courseHasStudent.CourseIdCourse);
-            ViewData["StudentsRegistrationNumber"] = new SelectList(_context.Students, "RegistrationNumber", "RegistrationNumber", courseHasStudent.StudentsRegistrationNumber);
+           
             return View(courseHasStudent);
         }
 
@@ -60,7 +60,7 @@ namespace UniversitySystemWeb.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> InsertGrade(int courseId,int professorId,[Bind("CourseIdCourse,StudentsRegistrationNumber,GradeCourseStudent")] CourseHasStudent courseHasStudent)
+        public async Task<IActionResult> InsertGrade(int courseId,int professorId, int registrationNumber, [Bind("CourseIdCourse,StudentsRegistrationNumber,GradeCourseStudent")] CourseHasStudent courseHasStudent)
         {
             if (courseHasStudent.CourseIdCourse==0)
             {
@@ -83,7 +83,7 @@ namespace UniversitySystemWeb.Controllers
                     }
             }
             
-            return RedirectToAction("Index", "CourseHasStudents");
+            return RedirectToAction("ViewGrade", "Professors", new {id=professorId});
         }
 
        

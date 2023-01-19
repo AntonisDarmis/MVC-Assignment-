@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
 namespace UniversitySystemWeb.Models;
-
+[PrimaryKey ("CourseIdCourse","StudentsRegistrationNumber")]
 [Table("course_has_students")]
 public partial class CourseHasStudent
 {
@@ -13,6 +13,7 @@ public partial class CourseHasStudent
     [Column("COURSE_idCOURSE")]
     public int CourseIdCourse { get; set; }
 
+    [Key]
     [Column("STUDENTS_RegistrationNumber")]
     public int StudentsRegistrationNumber { get; set; }
 

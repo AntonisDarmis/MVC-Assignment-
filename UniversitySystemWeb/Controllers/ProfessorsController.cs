@@ -40,10 +40,8 @@ namespace UniversitySystemWeb.Controllers
 
         public async Task<IActionResult> ViewGrade(int? id,string cTitle = "") 
         {
-            var professor = await _context.Professors
-                .Include(s => s.UsersUsernameNavigation)
-                .FirstOrDefaultAsync(m => m.Afm == id);
-            ViewBag.id = professor.Afm;
+            
+            ViewBag.id = id;
             var courses = from course in _context.Courses
                           join courseGrades in _context.CourseHasStudents on course.IdCourse equals courseGrades.CourseIdCourse
                           into result
@@ -76,10 +74,8 @@ namespace UniversitySystemWeb.Controllers
 
         public async Task<IActionResult> ViewNotGraded(int? id)
         {
-            var professor = await _context.Professors
-                .Include(s => s.UsersUsernameNavigation)
-                .FirstOrDefaultAsync(m => m.Afm == id);
-            ViewBag.id = professor.Afm;
+           
+            ViewBag.id = id;
             var courses = from course in _context.Courses
                           join courseGrades in _context.CourseHasStudents on course.IdCourse equals courseGrades.CourseIdCourse
                           into result
@@ -87,7 +83,7 @@ namespace UniversitySystemWeb.Controllers
                           join prof in _context.Professors on course.ProfessorsAfm equals prof.Afm
                           where item.GradeCourseStudent == null
                           select new ViewModel
-                          { title = course.CourseTitle, semester = course.CourseSemester, registrationNumber = (int)item.StudentsRegistrationNumber,professorId = professor.Afm, courseId=item.CourseIdCourse };
+                          { title = course.CourseTitle, semester = course.CourseSemester, registrationNumber = (int)item.StudentsRegistrationNumber,professorId = (int)id, courseId=item.CourseIdCourse };
             
             if (courses != null)
             {
