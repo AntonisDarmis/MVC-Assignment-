@@ -45,8 +45,8 @@ namespace UniversitySystemWeb.Controllers
                          into res1
                          from item in res1
                          join course in _context.Courses on item.CourseIdCourse equals course.IdCourse
-                         where stud.RegistrationNumber == id
-                         select new ViewModel
+                         where stud.RegistrationNumber == id && item.GradeCourseStudent != null
+                        select new ViewModel
                          {grade = (int)item.GradeCourseStudent, title = course.CourseTitle, semester = course.CourseSemester };
             ViewBag.id = student.RegistrationNumber;
             if (grade != null)
@@ -73,7 +73,7 @@ namespace UniversitySystemWeb.Controllers
                           into res1
                           from item in res1
                           join course in _context.Courses on item.CourseIdCourse equals course.IdCourse
-                          where stud.RegistrationNumber == id && course.CourseSemester == semester
+                          where stud.RegistrationNumber == id && course.CourseSemester == semester && item.GradeCourseStudent != null
                           select new ViewModel
                           { grade = (int)item.GradeCourseStudent, title = course.CourseTitle, semester = course.CourseSemester, registrationNumber = (int)item.StudentsRegistrationNumber };
             ViewBag.id = student.RegistrationNumber;
@@ -105,7 +105,7 @@ namespace UniversitySystemWeb.Controllers
                           into res1
                           from item in res1
                           join course in _context.Courses on item.CourseIdCourse equals course.IdCourse
-                          where stud.RegistrationNumber == id 
+                          where stud.RegistrationNumber == id && item.GradeCourseStudent != null
                           select new ViewModel
                           { grade = (int)item.GradeCourseStudent, title = course.CourseTitle, semester = course.CourseSemester };
             if (student == null)

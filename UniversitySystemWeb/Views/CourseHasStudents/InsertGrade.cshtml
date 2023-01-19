@@ -4,7 +4,7 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
+<h1>Insert grade for subject: @ViewBag.name</h1>
 
 <h4>CourseHasStudent</h4>
 <hr />
@@ -12,11 +12,10 @@
     <div class="col-md-4">
         <form asp-action="InsertGrade" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="CourseIdCourse" />
-
+            <input type="hidden" asp-for="CourseIdCourse"  />  
             <div class="form-group">
                 <label asp-for="StudentsRegistrationNumber" class="control-label"></label>
-                <input type="text" asp-for="StudentsRegistrationNumber" class="form-control" asp-items="ViewBag.StudentsRegistrationNumber" disabled/>
+                <input type="text" asp-for="StudentsRegistrationNumber" class="form-control" asp-items="ViewBag.StudentsRegistrationNumber" />
                 <span asp-validation-for="StudentsRegistrationNumber" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -25,6 +24,8 @@
                 <span asp-validation-for="GradeCourseStudent" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <input type="hidden" id="professorId" name="professorId" class="form-control" value="@ViewBag.professorId" />
+                <input type="hidden" id="courseId" name="courseId" class="form-control" value="@ViewBag.courseId" />
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>

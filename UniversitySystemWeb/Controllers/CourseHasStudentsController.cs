@@ -33,6 +33,8 @@ namespace UniversitySystemWeb.Controllers
         // GET: CourseHasStudents/Edit/5
         public async Task<IActionResult> InsertGrade(int courseId,int professorId,string courseName)
         {
+            ViewBag.courseId = courseId;
+            ViewBag.professorId = professorId;
             ViewBag.name = courseName;
             if (courseId == null || _context.CourseHasStudents == null)
             {
@@ -64,12 +66,6 @@ namespace UniversitySystemWeb.Controllers
             {
                 return NotFound();
             }
-            var errors = ModelState
-            .Where(x => x.Value.Errors.Count > 0)
-            .Select(x => new { x.Key, x.Value.Errors })
-            .ToArray();
-            if (ModelState.IsValid)
-            {
                 try
                 {
                     _context.Update(courseHasStudent);
@@ -85,12 +81,9 @@ namespace UniversitySystemWeb.Controllers
                     {
                         throw;
                     }
-                }
-                return RedirectToAction(nameof(Index));
             }
-            ViewData["CourseIdCourse"] = new SelectList(_context.Courses, "IdCourse", "IdCourse", courseHasStudent.CourseIdCourse);
-            ViewData["StudentsRegistrationNumber"] = new SelectList(_context.Students, "RegistrationNumber", "RegistrationNumber", courseHasStudent.StudentsRegistrationNumber);
-            return RedirectToAction("Index", "Professor", professorId);
+            
+            return RedirectToAction("Index", "CourseHasStudents");
         }
 
        
