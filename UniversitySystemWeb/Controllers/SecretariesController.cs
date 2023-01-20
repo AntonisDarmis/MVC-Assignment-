@@ -169,14 +169,10 @@ namespace UniversitySystemWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> InsertCourse([Bind("IdCourse,CourseTitle,CourseSemester,ProfessorsAfm")] Course course)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(course);
-                await _context.SaveChangesAsync();
+            _context.Add(course);
+            await _context.SaveChangesAsync();
 
-                return RedirectToAction("Index", "Secretaries");
-            }
-            return View();
+            return RedirectToAction("Index", "Secretaries");
         }
 
         // GET: Secretaries/InsertProfessor
