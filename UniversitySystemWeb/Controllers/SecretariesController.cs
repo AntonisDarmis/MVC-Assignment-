@@ -252,6 +252,13 @@ namespace UniversitySystemWeb.Controllers
 
         public async Task<IActionResult> ViewCourses() 
         {
+            var courses = (from course in _context.Courses 
+                           select new ViewModel { title = course.CourseTitle, semester = course.CourseSemester, professorId = course.ProfessorsAfm}
+                           ).OrderBy(x => x.semester);
+            if (courses!=null)
+            {
+                return View(courses);
+            }
             return View();
         }
 
