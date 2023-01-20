@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="Views\Secretaries\InsertCourse.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.2">
       <PrivateAssets>all</PrivateAssets>
@@ -25,10 +21,6 @@
 
   <ItemGroup>
     <_ContentIncludedByDefault Remove="Views\Secretaries\InsertCourse.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="Views\Secretaries\InsertCourse.cshtml" />
   </ItemGroup>
 
 </Project>

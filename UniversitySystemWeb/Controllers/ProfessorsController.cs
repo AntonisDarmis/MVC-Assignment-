@@ -92,7 +92,25 @@ namespace UniversitySystemWeb.Controllers
             return View();
         }
 
-        
+        public IActionResult Create(string username)
+        {
+            ViewData["UsersUsername"] = new SelectList(_context.Users, "Username", "Username");
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(string username,[Bind("Afm,Name,Surname,Department,UsersUsername")] Professor professor)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(professor);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Index", "Secretaries", new { username = username });
+            }
+            return NotFound();
+            
+        }
 
 
 

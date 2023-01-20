@@ -19,8 +19,9 @@ namespace UniversitySystemWeb.Controllers
         }
 
         // GET: Secretaries
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string username)
         {
+            ViewBag.username = username;
             var graderDBContext = _context.Secretaries.Include(s => s.UsersUsernameNavigation);
             return View(await graderDBContext.ToListAsync());
         }
