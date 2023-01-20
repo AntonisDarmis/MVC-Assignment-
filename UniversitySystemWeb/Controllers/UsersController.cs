@@ -65,7 +65,7 @@ namespace UniversitySystemWeb.Controllers
                     }
                     else if (data.FirstOrDefault().Role.Equals("secretary"))
                     {
-                        return RedirectToAction("Index", "Secretaries",username);
+                        return RedirectToAction("Index", "Secretaries", new { username = username });
                     }
                     else 
                     {

@@ -154,10 +154,57 @@ namespace UniversitySystemWeb.Controllers
             {
                 _context.Secretaries.Remove(secretary);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
+        public async Task<IActionResult> InsertCourse()
+        {
+            return View();
+        }
+
+
+        public async Task<IActionResult> InsertProfessor()
+        {
+            return View();
+        }
+
+        
+
+        public async Task<IActionResult> InsertStudent() 
+        {
+            return View();
+        } 
+
+        public async Task<IActionResult> ViewCourses() 
+        {
+            return View();
+        }
+
+        public async Task<IActionResult> AssignCourse() 
+        {
+            return View();
+        }
+
+        public async Task<IActionResult> RegisterCourse() 
+        {
+            return View();
+        }
+
+
+        
+
+
+
+
+
+
+
+
+
+
+
 
         private bool SecretaryExists(int id)
         {
