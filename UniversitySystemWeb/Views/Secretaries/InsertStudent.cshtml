@@ -1,6 +1,52 @@
-﻿@*
+﻿@model UniversitySystemWeb.Models.UserStudent
+@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
     ViewData["Title"] = "InsertStudent";
 }
+
+<h4>Add a student</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="InsertStudent">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="username" class="control-label"></label>
+                <input asp-for="username" class="form-control" />
+                <span asp-validation-for="username" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="password" class="control-label"></label>
+                <input type="password" asp-for="password" class="form-control" />
+                <span asp-validation-for="password" class="text-danger"></span>
+                <input type="hidden" asp-for="role" id="role" name="role" class="form-control" value="student" />
+            </div>
+            <div class="form-group">
+                <label asp-for="registrationnumber" class="control-label"></label>
+                <input type="number" asp-for="registrationnumber" class="form-control" />
+                <span asp-validation-for="registrationnumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="name" class="control-label"></label>
+                <input asp-for="name" class="form-control" />
+                <span asp-validation-for="name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="surname" class="control-label"></label>
+                <input asp-for="surname" class="form-control" />
+                <span asp-validation-for="surname" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="department" class="control-label"></label>
+                <input asp-for="department" class="form-control" />
+                <span asp-validation-for="department" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="hidden" id="username" name="username" class="form-control" value="@ViewBag.username" />
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>

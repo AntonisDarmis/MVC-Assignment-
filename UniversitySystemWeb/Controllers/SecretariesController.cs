@@ -19,9 +19,9 @@ namespace UniversitySystemWeb.Controllers
         }
 
         // GET: Secretaries
-        public async Task<IActionResult> Index(string username)
+        public async Task<IActionResult> Index()
         {
-            ViewBag.username = username;
+            //ViewBag.username = username;
             var graderDBContext = _context.Secretaries.Include(s => s.UsersUsernameNavigation);
             return View(await graderDBContext.ToListAsync());
         }
@@ -165,18 +165,94 @@ namespace UniversitySystemWeb.Controllers
             return View();
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> InsertCourse([Bind("IdCourse,CourseTitle,CourseSemester,ProfessorsAfm")] Course course)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(course);
+                await _context.SaveChangesAsync();
 
+                return RedirectToAction("Index", "Secretaries");
+            }
+            return View();
+        }
+
+        // GET: Secretaries/InsertProfessor
         public async Task<IActionResult> InsertProfessor()
         {
             return View();
         }
-
         
+
+        // POST: Secretaries/InsertProfessor
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> InsertProfessor([Bind("username,password,role,afm,name,surname,department")] UserProfessor userProfessor)
+        {
+            if (ModelState.IsValid)
+            {
+                User user = new User();
+                user.Username = userProfessor.username;
+                user.Password = userProfessor.password;
+                user.Role = userProfessor.role;
+                _context.Add(user);
+                await _context.SaveChangesAsync();
+
+                Professor professor = new Professor();
+                professor.Afm = userProfessor.afm;
+                professor.Name = userProfessor.name;
+                professor.Surname = userProfessor.surname;
+                professor.Department = userProfessor.department;
+                professor.UsersUsername = userProfessor.username;
+
+                _context.Add(professor);
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction("Index","Secretaries");
+            }
+            return View();
+        }
+
+
 
         public async Task<IActionResult> InsertStudent() 
         {
             return View();
-        } 
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> InsertStudent([Bind("username,password,role,registrationnumber,name,surname,department")] UserStudent userStudent)
+        {
+            if (ModelState.IsValid)
+            {
+                User user = new User();
+                user.Username = userStudent.username;
+                user.Password = userStudent.password;
+                user.Role = userStudent.role;
+                _context.Add(user);
+                await _context.SaveChangesAsync();
+
+                Student student = new Student();
+                student.RegistrationNumber = userStudent.registrationnumber;
+                student.Name = userStudent.name;
+                student.Surname = userStudent.surname;
+                student.Department = userStudent.department;
+                student.UsersUsername = userStudent.username;
+
+                _context.Add(student);
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction("Index", "Secretaries");
+            }
+            return View();
+        }
+
+
 
         public async Task<IActionResult> ViewCourses() 
         {
