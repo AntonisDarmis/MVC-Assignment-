@@ -6,7 +6,7 @@
 
 <h1>Insert grade for subject: @ViewBag.name</h1>
 
-<h4>CourseHasStudent</h4>
+
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -14,12 +14,12 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="CourseIdCourse"  />  
             <div class="form-group">
-                <label asp-for="StudentsRegistrationNumber" class="control-label"></label>
+                <label asp-for="StudentsRegistrationNumber" class="control-label">Student ID</label>
                 <input type="text" asp-for="StudentsRegistrationNumber" class="form-control" asp-items="ViewBag.StudentsRegistrationNumber" readonly="readonly"/>
                 <span asp-validation-for="StudentsRegistrationNumber" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="GradeCourseStudent" class="control-label"></label>
+                <label asp-for="GradeCourseStudent" class="control-label">Grade</label>
                 <input type ="number" min ="0" max="10" asp-for="GradeCourseStudent" class="form-control"  />
                 <span asp-validation-for="GradeCourseStudent" class="text-danger"></span>
             </div>

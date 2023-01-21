@@ -23,7 +23,7 @@ namespace UniversitySystemWeb.Controllers
         {
             var professor = await _context.Professors
                 .Include(s => s.UsersUsernameNavigation)
-                .FirstOrDefaultAsync();
+                .FirstOrDefaultAsync(m=> m.UsersUsername==username);
             ViewBag.id = professor.Afm;
             if (professor != null)
             {
@@ -47,7 +47,7 @@ namespace UniversitySystemWeb.Controllers
                           into result
                           from item in result
                           join prof in _context.Professors on course.ProfessorsAfm equals prof.Afm
-                          where item.GradeCourseStudent != null 
+                          where item.GradeCourseStudent != null && course.ProfessorsAfm==id
                           select new ViewModel
                           { grade = (int)item.GradeCourseStudent, title = course.CourseTitle, semester = course.CourseSemester, registrationNumber = (int)item.StudentsRegistrationNumber }).OrderBy(x=>x.semester);
 
@@ -81,8 +81,8 @@ namespace UniversitySystemWeb.Controllers
                           into result
                           from item in result
                           join prof in _context.Professors on course.ProfessorsAfm equals prof.Afm
-                          where item.GradeCourseStudent == null
-                          select new ViewModel
+                          where item.GradeCourseStudent == null && course.ProfessorsAfm == id
+                           select new ViewModel
                           { title = course.CourseTitle, semester = course.CourseSemester, registrationNumber = (int)item.StudentsRegistrationNumber,professorId = (int)id, courseId=item.CourseIdCourse }).OrderBy(x=>x.semester);
             
             if (courses != null)
