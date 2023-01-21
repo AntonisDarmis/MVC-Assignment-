@@ -1,6 +1,30 @@
-﻿@*
+﻿@model UniversitySystemWeb.Models.CourseHasStudent
+@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
     ViewData["Title"] = "RegisterCourse";
 }
+
+<h1>Register course: @ViewBag.courseTitle to a student</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="RegisterCourse" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="CourseIdCourse" value="@ViewBag.courseId" />
+            <div class="form-group">
+                <label asp-for="StudentsRegistrationNumber" class="control-label"></label>
+                <input type="number" asp-for="StudentsRegistrationNumber" class="form-control" />
+                <span asp-validation-for="StudentsRegistrationNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="hidden" value="@null" id="GradeCourseStudent" asp-for="GradeCourseStudent" />
+                <input type="hidden" id="courseId" name="courseId" class="form-control" value="@ViewBag.courseId" />
+                <input type="hidden" id="courseTitle" name="courseTitle" class="form-control" value="@ViewBag.courseTitle" />
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
