@@ -23,7 +23,7 @@ namespace UniversitySystemWeb.Controllers
         {
             var student = await _context.Students
                 .Include(s => s.UsersUsernameNavigation)
-                .FirstOrDefaultAsync();
+                .FirstOrDefaultAsync(m=> m.UsersUsername==username);
             ViewBag.id = student.RegistrationNumber;
             if (student!=null) 
             {
@@ -117,7 +117,10 @@ namespace UniversitySystemWeb.Controllers
             {
                 totalGrade += item.grade;
             }
-            totalGrade = totalGrade / courses.Count();
+            if (courses.Count() > 0)
+            {
+                totalGrade = totalGrade / courses.Count();
+            }
             return View(ViewBag.Total = totalGrade);
         }
 
