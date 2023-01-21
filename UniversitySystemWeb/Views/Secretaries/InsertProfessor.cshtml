@@ -4,8 +4,6 @@
     ViewData["Title"] = "InsertProfessor";
 }
 
-<h1>Create</h1>
-
 <h4>Add a professor</h4>
 <hr />
 <div class="row">
@@ -13,33 +11,33 @@
         <form asp-action="InsertProfessor">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="username" class="control-label"></label>
+                <label asp-for="username" class="control-label">Username</label>
                 <input asp-for="username" class="form-control" />
                 <span asp-validation-for="username" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="password" class="control-label"></label>
+                <label asp-for="password" class="control-label">Password</label>
                 <input type="password" asp-for="password" class="form-control" />
                 <span asp-validation-for="password" class="text-danger"></span>
                 <input type="hidden" asp-for="role" id="role" name="role" class="form-control" value="professor" />
             </div>
             <div class="form-group">
-                <label asp-for="afm" class="control-label"></label>
+                <label asp-for="afm" class="control-label">ID</label>
                 <input asp-for="afm" class="form-control" />
                 <span asp-validation-for="afm" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="name" class="control-label"></label>
+                <label asp-for="name" class="control-label">First name</label>
                 <input asp-for="name" class="form-control" />
                 <span asp-validation-for="name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="surname" class="control-label"></label>
+                <label asp-for="surname" class="control-label">Surname</label>
                 <input asp-for="surname" class="form-control" />
                 <span asp-validation-for="surname" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="department" class="control-label"></label>
+                <label asp-for="department" class="control-label">Department</label>
                 <input asp-for="department" class="form-control" />
                 <span asp-validation-for="department" class="text-danger"></span>
             </div>

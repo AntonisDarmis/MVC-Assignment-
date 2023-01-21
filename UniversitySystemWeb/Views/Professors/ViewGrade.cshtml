@@ -6,7 +6,7 @@
     var filteredModels = Model.Select(s=>s.title == ViewBag.title);
 }
 
-<h2>View courses per semester</h2>
+<h2>Graded students per course</h2>
 <div>
     @using (Html.BeginForm("ViewGrade", "Professors"))
     {

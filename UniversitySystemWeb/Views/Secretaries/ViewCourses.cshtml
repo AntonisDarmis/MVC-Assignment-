@@ -21,6 +21,12 @@
             <th>
                 Professor ID
             </th>
+            <th>
+                Assign to prof.
+            </th>
+            <th>
+                Register student
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -38,7 +44,7 @@
                 </td>
                 <td>
                     @Html.ActionLink("Assign","AssignCourse","Secretaries",
-                    new {courseId = item.courseId, profAfm = item.professorId, semester=item.semester, courseTitle = item.title});
+                    new {courseId = item.courseId, profAfm = item.professorId, semester=item.semester, courseTitle = item.title})
                 </td>
                 <td>
                     @Html.ActionLink("Register","RegisterCourse","Secretaries",

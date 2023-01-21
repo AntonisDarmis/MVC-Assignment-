@@ -40,14 +40,14 @@ namespace UniversitySystemWeb.Controllers
             var student = await _context.Students
                .Include(s => s.UsersUsernameNavigation)
                .FirstOrDefaultAsync(m => m.RegistrationNumber == id);
-            var grade = from stud in _context.Students
+            var grade = (from stud in _context.Students
                          join courseGrades in _context.CourseHasStudents on stud.RegistrationNumber equals courseGrades.StudentsRegistrationNumber
                          into res1
                          from item in res1
                          join course in _context.Courses on item.CourseIdCourse equals course.IdCourse
                          where stud.RegistrationNumber == id && item.GradeCourseStudent != null
                         select new ViewModel
-                         {grade = (int)item.GradeCourseStudent, title = course.CourseTitle, semester = course.CourseSemester };
+                         {grade = (int)item.GradeCourseStudent, title = course.CourseTitle, semester = course.CourseSemester }).OrderBy(x => x.semester);
             ViewBag.id = student.RegistrationNumber;
             if (grade != null)
             {
@@ -112,7 +112,7 @@ namespace UniversitySystemWeb.Controllers
             {
                 return NotFound();
             }
-            int totalGrade = 0;
+            float totalGrade = 0;
             foreach (var item in courses) 
             {
                 totalGrade += item.grade;

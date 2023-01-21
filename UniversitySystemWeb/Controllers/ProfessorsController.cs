@@ -42,14 +42,14 @@ namespace UniversitySystemWeb.Controllers
         {
             
             ViewBag.id = id;
-            var courses = from course in _context.Courses
+            var courses = (from course in _context.Courses
                           join courseGrades in _context.CourseHasStudents on course.IdCourse equals courseGrades.CourseIdCourse
                           into result
                           from item in result
                           join prof in _context.Professors on course.ProfessorsAfm equals prof.Afm
                           where item.GradeCourseStudent != null 
                           select new ViewModel
-                          { grade = (int)item.GradeCourseStudent, title = course.CourseTitle, semester = course.CourseSemester, registrationNumber = (int)item.StudentsRegistrationNumber };
+                          { grade = (int)item.GradeCourseStudent, title = course.CourseTitle, semester = course.CourseSemester, registrationNumber = (int)item.StudentsRegistrationNumber }).OrderBy(x=>x.semester);
 
             var titles = new List<string>(courses.Select(x => x.title).Distinct());
             List<SelectListItem> courseTitles  = titles.ConvertAll(a =>
@@ -76,14 +76,14 @@ namespace UniversitySystemWeb.Controllers
         {
            
             ViewBag.id = id;
-            var courses = from course in _context.Courses
+            var courses = (from course in _context.Courses
                           join courseGrades in _context.CourseHasStudents on course.IdCourse equals courseGrades.CourseIdCourse
                           into result
                           from item in result
                           join prof in _context.Professors on course.ProfessorsAfm equals prof.Afm
                           where item.GradeCourseStudent == null
                           select new ViewModel
-                          { title = course.CourseTitle, semester = course.CourseSemester, registrationNumber = (int)item.StudentsRegistrationNumber,professorId = (int)id, courseId=item.CourseIdCourse };
+                          { title = course.CourseTitle, semester = course.CourseSemester, registrationNumber = (int)item.StudentsRegistrationNumber,professorId = (int)id, courseId=item.CourseIdCourse }).OrderBy(x=>x.semester);
             
             if (courses != null)
             {

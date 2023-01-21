@@ -15,7 +15,7 @@
             <input type="hidden" asp-for="CourseIdCourse"  />  
             <div class="form-group">
                 <label asp-for="StudentsRegistrationNumber" class="control-label"></label>
-                <input type="text" asp-for="StudentsRegistrationNumber" class="form-control" asp-items="ViewBag.StudentsRegistrationNumber" />
+                <input type="text" asp-for="StudentsRegistrationNumber" class="form-control" asp-items="ViewBag.StudentsRegistrationNumber" readonly="readonly"/>
                 <span asp-validation-for="StudentsRegistrationNumber" class="text-danger"></span>
             </div>
             <div class="form-group">
