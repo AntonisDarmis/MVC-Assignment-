@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Tracing;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -248,12 +249,12 @@ namespace UniversitySystemWeb.Controllers
             return View();
         }
 
-
+        
 
         public async Task<IActionResult> ViewCourses() 
         {
             var courses = (from course in _context.Courses 
-                           select new ViewModel { title = course.CourseTitle, semester = course.CourseSemester, professorId = course.ProfessorsAfm}
+                           select new ViewModel { courseId = course.IdCourse,title = course.CourseTitle, semester = course.CourseSemester, professorId = course.ProfessorsAfm}
                            ).OrderBy(x => x.semester);
             if (courses!=null)
             {
@@ -262,18 +263,88 @@ namespace UniversitySystemWeb.Controllers
             return View();
         }
 
-        public async Task<IActionResult> AssignCourse() 
+        public async Task<IActionResult> AssignCourse(int courseId, int profAfm, string semester,string courseTitle) 
         {
+            ViewBag.courseId = courseId;
+            ViewBag.profAfm = profAfm;
+            ViewBag.courseTitle = courseTitle;
+            ViewBag.semester = semester;
+            if (courseId == null || profAfm==null)
+            {
+                return NotFound();
+            }
+            var course = await _context.Courses.FindAsync(courseId);
+            if(course==null)
+            {
+                return NotFound();
+            }
+            return View(course);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AssignCourse(int courseId, int profAfm, string semester,string courseTitle, [Bind("IdCourse,CourseTitle,CourseSemester,ProfessorsAfm")] Course course)
+        {
+            if(course.IdCourse==0)
+            {
+                return NotFound();
+            }
+
+            try
+            {
+                _context.Update(course);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw;
+            }
+            return RedirectToAction("Index","Secretaries");
+        }
+
+
+
+        public async Task<IActionResult> RegisterCourse(int courseId, string courseTitle) 
+        {
+            ViewBag.courseId = courseId;
+            ViewBag.courseTitle = courseTitle;
+            if (courseId == null)
+            {
+                return NotFound();
+            }
+            var course = await _context.Courses.FindAsync(courseId);
+            if (course==null)
+            {
+                return NotFound();
+            }
             return View();
         }
 
-        public async Task<IActionResult> RegisterCourse() 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RegisterCourse(int courseId,string courseTitle, [Bind("CourseIdCourse,StudentsRegistrationNumber,GradeCourseStudent")] CourseHasStudent courseHasStudent)
         {
-            return View();
+            if (courseHasStudent == null)
+            {
+                return NotFound();
+            }
+            try
+            {
+                var found = await _context.CourseHasStudents.FindAsync(courseHasStudent.CourseIdCourse, courseHasStudent.StudentsRegistrationNumber);
+                if (found == null)
+                {
+                    _context.Add(courseHasStudent);
+                    await _context.SaveChangesAsync();
+                }
+            } catch (DbUpdateConcurrencyException)
+            {
+                throw;
+            }
+            return RedirectToAction("Index", "Secretaries");
         }
 
 
-        
+
 
 
 
